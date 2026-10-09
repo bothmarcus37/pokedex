@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Pokédex Interactiva    </title>
+
+    <link rel="preconnect" href="https://pokeapi.co">
+    <link rel="preconnect" href="https://raw.githubusercontent.com">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- =====================================================
+         ENCABEZADO
+    ====================================================== -->
+
+    <header class="header">
+
+        <div class="header__contenido">
+
+            <div class="header__marca">
+
+                <img
+                    class="header__logo"
+                    src="https://raw.githubusercontent.com/PokeAPI/media/master/logo/pokeapi_256.png"
+                    alt="Logo de PokeAPI"
+                >
+
+                <div>
+                    <h1>
+                        Pokédex Interactiva                    </h1>
+
+                    <p class="header__subtitulo">
+                        Consumo de la PokeAPI con fetch() · HTML, PHP, CSS y JavaScript
+                    </p>
+                </div>
+
+            </div>
+
+
+            <!-- BUSCADOR -->
+
+            <form
+                id="form-busqueda"
+                class="buscador"
+                autocomplete="off"
+            >
+
+                <input
+                    type="search"
+                    id="input-busqueda"
+                    class="buscador__input"
+                    placeholder="Buscar por nombre o número (ej. pikachu, 25)"
+                    aria-label="Buscar Pokémon"
+                >
+
+                <button
+                    type="submit"
+                    class="buscador__boton"
+                >
+                    Buscar
+                </button>
+
+                <button
+                    type="button"
+                    id="btn-limpiar"
+                    class="buscador__boton buscador__boton--secundario"
+                >
+                    Ver todos
+                </button>
+
+            </form>
+
+        </div>
+
+
+        <!-- FILTROS -->
+
+        <div
+            class="filtros"
+            id="contenedor-filtros"
+        >
+
+            <span class="filtros__etiqueta">
+                Filtrar por tipo:
+            </span>
+
+            <div
+                id="lista-tipos"
+                class="filtros__tipos"
+            ></div>
+
+        </div>
+
+    </header>
+
+
+    <!-- =====================================================
+         CONTENIDO PRINCIPAL
+    ====================================================== -->
+
+    <main class="main">
+
+        <p
+            id="mensaje-estado"
+            class="mensaje-estado"
+            aria-live="polite"
+        ></p>
+
+        <section
+            id="contenedor-tarjetas"
+            class="tarjetas"
+            ></section>
+
+
+        <!-- CARGAR MÁS -->
+
+        <div class="acciones-carga">
+
+            <div
+                id="spinner"
+                class="spinner"
+                hidden
+                aria-label="Cargando"
+            ></div>
+
+            <button
+                id="btn-cargar-mas"
+                class="boton-cargar"
+                type="button"
+            >
+                Cargar más Pokémon
+            </button>
+
+        </div>
+
+    </main>
+
+
+    <!-- =====================================================
+         MODAL
+    ====================================================== -->
+
+    <div
+        id="modal-overlay"
+        class="modal-overlay"
+        hidden
+    >
+
+        <div
+            class="modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-nombre"
+        >
+
+            <button
+                id="btn-cerrar-modal"
+                class="modal__cerrar"
+                type="button"
+                aria-label="Cerrar ventana"
+            >
+                &times;
+            </button>
+
+
+            <!-- ENCABEZADO DEL MODAL -->
+
+            <div class="modal__encabezado">
+
+                <img
+                    id="modal-imagen"
+                    class="modal__imagen"
+                    src=""
+                    alt=""
+                >
+
+                <div>
+
+                    <p
+                        class="modal__numero"
+                        id="modal-numero"
+                    ></p>
+
+                    <h2
+                        id="modal-nombre"
+                        class="modal__nombre"
+                    ></h2>
+
+                    <p
+                        class="modal__genero"
+                        id="modal-genero"
+                    ></p>
+
+                    <div
+                        id="modal-tipos"
+                        class="modal__tipos"
+                    ></div>
+
+                </div>
+
+            </div>
+
+
+            <!-- DESCRIPCIÓN -->
+
+            <p
+                id="modal-descripcion"
+                class="modal__descripcion"
+            ></p>
+
+
+            <!-- DATOS -->
+
+            <div class="modal__datos">
+
+                <div class="dato">
+                    <span
+                        class="dato__valor"
+                        id="modal-altura"
+                    ></span>
+
+                    <span class="dato__etiqueta">
+                        Altura
+                    </span>
+                </div>
+
+
+                <div class="dato">
+                    <span
+                        class="dato__valor"
+                        id="modal-peso"
+                    ></span>
+
+                    <span class="dato__etiqueta">
+                        Peso
+                    </span>
+                </div>
+
+
+                <div class="dato">
+                    <span
+                        class="dato__valor"
+                        id="modal-experiencia"
+                    ></span>
+
+                    <span class="dato__etiqueta">
+                        Exp. base
+                    </span>
+                </div>
+
+
+                <div class="dato">
+                    <span
+                        class="dato__valor"
+                        id="modal-captura"
+                    ></span>
+
+                    <span class="dato__etiqueta">
+                        Tasa de captura
+                    </span>
+                </div>
+
+            </div>
+
+
+            <!-- HABILIDADES -->
+
+            <div class="modal__seccion">
+
+                <h3>
+                    Habilidades
+                </h3>
+
+                <div
+                    id="modal-habilidades"
+                    class="chips"
+                ></div>
+
+            </div>
+
+
+            <!-- ESTADÍSTICAS -->
+
+            <div class="modal__seccion">
+
+                <h3>
+                    Estadísticas base
+                </h3>
+
+                <div
+                    id="modal-estadisticas"
+                    class="estadisticas"
+                ></div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    <footer class="footer">
+
+        <p>
+            Práctica de consumo de PokeAPI
+            &middot;
+            &copy; 2026            Pokédex Interactiva        </p>
+
+    </footer>
+
+
+    <!-- =====================================================
+         CONFIGURACIÓN PHP → JAVASCRIPT
+    ====================================================== -->
+
+    <script>
+        const CONFIG = {"titulo":"Pokédex Interactiva","porPagina":24,"apiBase":"https://pokeapi.co/api/v2","totalAprox":1302};
+    </script>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>

@@ -14,3 +14,6 @@ Copia la carpeta a `htdocs` de XAMPP, inicia Apache y abre `http://localhost/pok
 
 ## Hecho con
 PHP (configuración de la página), HTML, CSS y JavaScript.
+
+## Demo
+La versión en línea usa `index.html` (la misma página sin PHP), porque GitHub Pages no ejecuta PHP.
